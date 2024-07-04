@@ -28,12 +28,12 @@ resource "aws_s3_bucket_website_configuration" "website" {
 }
 
 resource "null_resource" "s3_sync" {
-  for_each = fileset("../static-website", "**/*")
+  for_each = fileset("${var.static_files_directory}", "**/*")
   triggers = {
-    file_changed = filemd5("../static-website/${each.key}")
+    file_changed = filemd5("${var.static_files_directory}/${each.key}")
   }
   provisioner "local-exec" {
     command = "aws s3 sync . s3://${aws_s3_bucket.static_bucket.id}"
-    working_dir = "../static-website/"
+    working_dir = "${var.static_files_directory}"
   }
 }
