@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "static_bucket" {
-  bucket = "jazeelstaticbucket.sctp-sandbox.com"
+  bucket = "jazeels3.sctp-sandbox.com"
   force_destroy = true
 }
 
@@ -27,13 +27,14 @@ resource "aws_s3_bucket_website_configuration" "website" {
   }
 }
 
-resource "null_resource" "s3_sync" {
-  for_each = fileset("${var.static_files_directory}", "**/*")
-  triggers = {
-    file_changed = filemd5("${var.static_files_directory}/${each.key}")
-  }
-  provisioner "local-exec" {
-    command = "aws s3 sync . s3://${aws_s3_bucket.static_bucket.id}"
-    working_dir = "${var.static_files_directory}"
+resource "aws_route53_record" "www" {
+  zone_id = data.aws_route53_zone.sctp_zone.zone_id
+  name    = "jazeels3"
+  type    = "A"
+
+  alias {
+    name                   = aws_s3_bucket_website_configuration.website.website_domain
+    zone_id                = aws_s3_bucket.static_bucket.hosted_zone_id
+    evaluate_target_health = true
   }
 }

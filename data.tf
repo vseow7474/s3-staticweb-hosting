@@ -1,3 +1,7 @@
+data "aws_route53_zone" "sctp_zone" {
+  name = "sctp-sandbox.com"
+}
+
 data "aws_iam_policy_document" "bucket_policy" {
   statement {
     principals {
