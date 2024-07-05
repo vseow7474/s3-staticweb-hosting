@@ -29,7 +29,7 @@ resource "aws_s3_bucket_website_configuration" "website" {
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.sctp_zone.zone_id
-  name    = "jazeelstatic"
+  name    = "jazeelstaticwebsite"
   type    = "A"
 
   alias {
