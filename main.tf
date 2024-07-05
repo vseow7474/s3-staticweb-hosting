@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "static_bucket" {
-  bucket = "jazeels3.sctp-sandbox.com"
+  bucket = "jazeelstaticwebsite.sctp-sandbox.com"
   force_destroy = true
 }
 
@@ -29,7 +29,7 @@ resource "aws_s3_bucket_website_configuration" "website" {
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.sctp_zone.zone_id
-  name    = "jazeels3"
+  name    = "jazeelstatic"
   type    = "A"
 
   alias {
